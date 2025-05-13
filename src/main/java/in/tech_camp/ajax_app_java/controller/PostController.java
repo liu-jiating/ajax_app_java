@@ -11,6 +11,8 @@ import in.tech_camp.ajax_app_java.form.PostForm;
 import in.tech_camp.ajax_app_java.repository.PostRepository;
 import lombok.AllArgsConstructor;
 
+import org.springframework.http.ResponseEntity;
+
 @Controller
 @AllArgsConstructor
 public class PostController {
@@ -31,12 +33,13 @@ public class PostController {
   // }
 
   @PostMapping("/posts")
-  public String savePost(@ModelAttribute("postForm") PostForm form){
-    // System.out.println("メソッド呼び出し：" + form);
+  public ResponseEntity<PostEntity> savePost(@ModelAttribute("postForm") PostForm form){
     PostEntity post = new PostEntity();
     post.setContent(form.getContent());
     postRepository.insert(post);
-    return "redirect:/";
+    PostEntity resultPost = postRepository.findById(post.getId());
+    // System.out.println(resultPost);
+    return ResponseEntity.ok(resultPost);
   }
   
 }
